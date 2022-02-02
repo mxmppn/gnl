@@ -6,27 +6,13 @@
 /*   By: mpepin <mpepin@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/05 14:07:11 by mpepin            #+#    #+#             */
-/*   Updated: 2022/01/27 17:46:19 by mpepin           ###   ########lyon.fr   */
+/*   Updated: 2022/02/02 21:52:58 by mpepin           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <fcntl.h>
 #include <stdio.h>
 #include "get_next_line.h"
-
-// static char	*initialize_line(void)
-// {
-// 	char	*ini_buff[BUFFER_SIZE];
-// 	size_t	i;
-
-// 	i = 0;
-// 	while (i < BUFFER_SIZE)
-// 	{
-// 		ini_buff[i] = 0;
-// 		i++;
-// 	}
-// 	return (ini_buff);
-// }
 
 size_t	ft_strlen(const char *s)
 {
@@ -40,58 +26,39 @@ size_t	ft_strlen(const char *s)
 	return (i);
 }
 
-size_t	ft_strlen_end_nl(const char *s)
+ssize_t	isthere_nl(char *str)
 {
-	size_t	i;
+	ssize_t	i;
 
 	i = 0;
-	if (!s)
-		return (0);
-	while (s[i] != '\0' && s[i] != '\n')
+	while (str[i])
+	{
+		if (str[i] == '\n')
+			return (i);
 		i++;
-	return (i);
+	}
+	return (-1);
 }
 
 char	*get_next_line(int fd)
 {
-	static char				buffer[BUFFER_SIZE] = {0};
-	char					*my_line;
-	static ssize_t			readed = 1;
-	static ssize_t			index_of_nl = -1;
+	static char		buff[BUFFER_SIZE] = {0};
+	static ssize_t	readed = 1;
+	char			*my_line;
 
-	my_line = strdup_right(buffer, index_of_nl);
-	if (isthere_nl(my_line) != -1)
+	if (isthere_nl(buff) != -1)
 	{
-		index_of_nl = isthere_nl(buffer, index_of_nl);
+		my_line = dup_to_nl(buff);
+		extract_conjugate(buff, my_line);
 		return (my_line);
 	}
-	readed = read(fd, buffer, BUFFER_SIZE);
-	printf("buffer_1=|%s|\n", buffer);
-	printf("nl_index=%d\n", index_of_nl);
-	printf("my_line=|%s|\n", my_line);
-	// printf("len_of_buffer=%d\n", ft_strlen(buffer));
-	while (readed > 0)
+	while (isthere_nl(buff) == -1)
 	{
-			
-		index_of_nl = isthere_nl(buffer);
-		// printf("nl_index=%d\n", index_of_nl);
-		if (index_of_nl >= 0)
-		{
-			printf("ca passe la\n");
-			my_line = ft_strjoin(my_line, strdup_left(buffer, index_of_nl));
-			return (my_line);
-		}
-		else
-		{
-			printf("ca passe ici\n");
-			// printf("len_of_line=%d\n", ft_strlen(my_line));
-			my_line = ft_strjoin(my_line, buffer);
-			// printf("my_line=%s\n", my_line);
-		}
-		readed = read(fd, buffer, BUFFER_SIZE);
-		printf("buffer_2=|%s|\n", buffer);
+		my_line = ft_strjoin(my_line, dup_to_nl(buff));
+		readed = read(fd, buff, BUFFER_SIZE);
 	}
-	my_line = ft_strjoin(my_line, buffer);
+	my_line = ft_strjoin(my_line, dup_to_nl(buff));
+	extract_conjugate(buff, dup_to_nl(buff));
 	return (my_line);
 }
 
@@ -111,11 +78,11 @@ int	main(int ac, char **av)
 
 	fd = open("./test_file.txt", O_RDONLY);
 	if (fd > 0)
-		printf("FILE OPENED, fd = %d\n", fd);
+		printf("FILE OPENED, fd = %d\n\n", fd);
 	i = 1;
 	while (i < 14)
 	{
-		printf("***   LINE %d=%s   ***\n", i, get_next_line(fd));
+		printf("***LINE %d=%s***\n", i, get_next_line(fd));
 		i++;
 	}
 	return (0);
