@@ -6,7 +6,7 @@
 /*   By: mpepin <mpepin@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/05 14:09:24 by mpepin            #+#    #+#             */
-/*   Updated: 2022/02/02 16:52:10 by mpepin           ###   ########lyon.fr   */
+/*   Updated: 2022/02/03 15:45:36 by mpepin           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,12 +55,8 @@ typedef struct s_list
 /* ************************************************************************ */
 
 size_t		ft_strlen(const char *s);
-size_t		ft_strlen_end_nl(const char *s);
 ssize_t		isthere_nl(char *str);
-ssize_t		get_next_nl(char *str, ssize_t index);
 char		*ft_strjoin(char const *s1, char const *s2);
-char		*strdup_left(char *str, size_t shift);
-char		*strdup_right(char *str, size_t shift);
 char		*dup_to_nl(char *str);
 void		extract_conjugate(char *str, char *pattern);
 char		*get_next_line(int fd);

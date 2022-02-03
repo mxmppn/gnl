@@ -6,7 +6,7 @@
 /*   By: mpepin <mpepin@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/05 14:07:11 by mpepin            #+#    #+#             */
-/*   Updated: 2022/02/02 21:52:58 by mpepin           ###   ########lyon.fr   */
+/*   Updated: 2022/02/03 15:35:36 by mpepin           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,23 +42,28 @@ ssize_t	isthere_nl(char *str)
 
 char	*get_next_line(int fd)
 {
-	static char		buff[BUFFER_SIZE] = {0};
+	static char		buff[BUFFER_SIZE];
 	static ssize_t	readed = 1;
 	char			*my_line;
 
-	if (isthere_nl(buff) != -1)
+	if (BUFFER_SIZE < 1)
+		return (NULL);
+	if (isthere_nl(buff) != -1 && readed > 0)
 	{
 		my_line = dup_to_nl(buff);
 		extract_conjugate(buff, my_line);
 		return (my_line);
 	}
-	while (isthere_nl(buff) == -1)
+	while (isthere_nl(buff) == -1 && readed > 0)
 	{
 		my_line = ft_strjoin(my_line, dup_to_nl(buff));
 		readed = read(fd, buff, BUFFER_SIZE);
 	}
-	my_line = ft_strjoin(my_line, dup_to_nl(buff));
-	extract_conjugate(buff, dup_to_nl(buff));
+	if (readed != 0)
+	{
+		my_line = ft_strjoin(my_line, dup_to_nl(buff));
+		extract_conjugate(buff, dup_to_nl(buff));
+	}
 	return (my_line);
 }
 
@@ -78,9 +83,10 @@ int	main(int ac, char **av)
 
 	fd = open("./test_file.txt", O_RDONLY);
 	if (fd > 0)
-		printf("FILE OPENED, fd = %d\n\n", fd);
+		printf("FILE OPENED, fd = %d\n", fd);
 	i = 1;
-	while (i < 14)
+	printf("BUFFER_SIZE=%d\n\n", BUFFER_SIZE);
+	while (i < 20)
 	{
 		printf("***LINE %d=%s***\n", i, get_next_line(fd));
 		i++;
