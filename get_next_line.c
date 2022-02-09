@@ -6,7 +6,7 @@
 /*   By: mpepin <mpepin@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/05 14:07:11 by mpepin            #+#    #+#             */
-/*   Updated: 2022/02/03 15:35:36 by mpepin           ###   ########lyon.fr   */
+/*   Updated: 2022/02/09 13:46:47 by mpepin           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <stdio.h>
 #include "get_next_line.h"
 
+// classic strlen with debug in case of s being NULL
 size_t	ft_strlen(const char *s)
 {
 	size_t	i;
@@ -26,6 +27,8 @@ size_t	ft_strlen(const char *s)
 	return (i);
 }
 
+// searches for a nl in str,
+// returns the index of it if founded, -1 if not
 ssize_t	isthere_nl(char *str)
 {
 	ssize_t	i;
@@ -40,13 +43,14 @@ ssize_t	isthere_nl(char *str)
 	return (-1);
 }
 
+// the chad get_next_line(), with probably the most unusual strat to solve it
 char	*get_next_line(int fd)
 {
 	static char		buff[BUFFER_SIZE];
 	static ssize_t	readed = 1;
 	char			*my_line;
 
-	if (BUFFER_SIZE < 1)
+	if (BUFFER_SIZE < 1 || readed == 0)
 		return (NULL);
 	if (isthere_nl(buff) != -1 && readed > 0)
 	{
@@ -67,7 +71,10 @@ char	*get_next_line(int fd)
 	return (my_line);
 }
 
-/*~IM A SEPARATOR, MY ONLY REASON OF EXISTANCE IS TO SEPARATE, LIFE IS PAIN~*/
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
+/*~IM JUST A SEPARATOR, DON'T MIND I ONLY EXIST FOR THIS REASON, LIFE IS PAIN~*/
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
+
 /* ************************************************************************ */
 /*																			*/
 /*																			*/
@@ -76,29 +83,21 @@ char	*get_next_line(int fd)
 /*																			*/
 /* ************************************************************************ */
 
+// test, just type what you want to test in the .test_file.txt, in the . folder
 int	main(int ac, char **av)
 {
-	int	fd;
-	int	i;
+	int		fd;
+	char	*line;
 
-	fd = open("./test_file.txt", O_RDONLY);
+	fd = open("./.test_file.txt", O_RDONLY);
 	if (fd > 0)
 		printf("FILE OPENED, fd = %d\n", fd);
-	i = 1;
-	printf("BUFFER_SIZE=%d\n\n", BUFFER_SIZE);
-	while (i < 20)
+	line = get_next_line(fd);
+	while ((get_next_line(fd)) != NULL)
 	{
-		printf("***LINE %d=%s***\n", i, get_next_line(fd));
-		i++;
+		printf("%s", line);
+		free(line);
 	}
+	printf("\n\nBUFFER_SIZE=%d\n\n", BUFFER_SIZE);
 	return (0);
 }
-
-// readed = read(fd, buffer, BUFFER_SIZE);
-	// if ((!readed && !ft_strchr(buffer) && !ft_strlen(buffer))
-	// 	|| readed == -1)
-	// 	return (NULL);
-	// if (!ft_strchr(buffer) && readed == BUFFER_SIZE)
-	// 	get_next_line(fd);
-	// my_line = strndup(buffer '\n ou 0');
-	// return (my_line);

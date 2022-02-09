@@ -6,12 +6,13 @@
 /*   By: mpepin <mpepin@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/05 17:24:02 by mpepin            #+#    #+#             */
-/*   Updated: 2022/02/02 21:27:32 by mpepin           ###   ########lyon.fr   */
+/*   Updated: 2022/02/03 16:31:52 by mpepin           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
+// classic join with debug in the case of s1 and s2 nulls 
 char	*ft_strjoin(char const *s1, char const *s2)
 {
 	size_t	i;
@@ -40,6 +41,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	return (joined_str);
 }
 
+// duplicates (malloc) a substr in str, as [0 ; max_index] or [0 ; nl_index]
 char	*dup_to_nl(char *str)
 {
 	char	*dupped_boi;
@@ -65,6 +67,8 @@ char	*dup_to_nl(char *str)
 	return (dupped_boi);
 }
 
+// extracts the conjugate of the pattern in str,
+// and then places it in the beginning of str (kinda dirty)
 void	extract_conjugate(char *str, char *pattern)
 {
 	size_t	i;
@@ -85,6 +89,6 @@ void	extract_conjugate(char *str, char *pattern)
 		i++;
 		j++;
 	}
-	str[j] = 0;
+	str[j] = '\0';
 	return ;
 }
