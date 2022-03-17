@@ -6,7 +6,7 @@
 /*   By: mpepin <mpepin@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/05 14:07:11 by mpepin            #+#    #+#             */
-/*   Updated: 2022/02/09 13:46:47 by mpepin           ###   ########lyon.fr   */
+/*   Updated: 2022/03/17 15:57:22 by mpepin           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,14 +89,15 @@ int	main(int ac, char **av)
 	int		fd;
 	char	*line;
 
-	fd = open("./.test_file.txt", O_RDONLY);
+	fd = open("bible.txt", O_RDONLY);
 	if (fd > 0)
 		printf("FILE OPENED, fd = %d\n", fd);
 	line = get_next_line(fd);
-	while ((get_next_line(fd)) != NULL)
+	while (line != NULL)
 	{
 		printf("%s", line);
 		free(line);
+		line = get_next_line(fd);
 	}
 	printf("\n\nBUFFER_SIZE=%d\n\n", BUFFER_SIZE);
 	return (0);
