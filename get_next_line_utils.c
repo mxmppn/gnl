@@ -6,13 +6,13 @@
 /*   By: mpepin <mpepin@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/05 17:24:02 by mpepin            #+#    #+#             */
-/*   Updated: 2022/02/03 16:31:52 by mpepin           ###   ########lyon.fr   */
+/*   Updated: 2022/04/07 15:14:52 by mpepin           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-// classic join with debug in the case of s1 and s2 nulls 
+// classic join with debug in the case of s1 and s2 nulls
 char	*ft_strjoin(char const *s1, char const *s2)
 {
 	size_t	i;

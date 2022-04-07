@@ -6,13 +6,13 @@
 /*   By: mpepin <mpepin@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/05 14:07:11 by mpepin            #+#    #+#             */
-/*   Updated: 2022/03/17 15:57:22 by mpepin           ###   ########lyon.fr   */
+/*   Updated: 2022/04/07 15:56:58 by mpepin           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <fcntl.h>
-#include <stdio.h>
 #include "get_next_line.h"
+// #include <fcntl.h>
+// #include <stdio.h>
 
 // classic strlen with debug in case of s being NULL
 size_t	ft_strlen(const char *s)
@@ -46,7 +46,7 @@ ssize_t	isthere_nl(char *str)
 // the chad get_next_line(), with probably the most unusual strat to solve it
 char	*get_next_line(int fd)
 {
-	static char		buff[BUFFER_SIZE];
+	static char		buff[BUFFER_SIZE + 1];
 	static ssize_t	readed = 1;
 	char			*my_line;
 
@@ -62,6 +62,7 @@ char	*get_next_line(int fd)
 	{
 		my_line = ft_strjoin(my_line, dup_to_nl(buff));
 		readed = read(fd, buff, BUFFER_SIZE);
+		buff[readed] = 0;
 	}
 	if (readed != 0)
 	{
@@ -84,21 +85,22 @@ char	*get_next_line(int fd)
 /* ************************************************************************ */
 
 // test, just type what you want to test in the .test_file.txt, in the . folder
-int	main(int ac, char **av)
-{
-	int		fd;
-	char	*line;
 
-	fd = open("bible.txt", O_RDONLY);
-	if (fd > 0)
-		printf("FILE OPENED, fd = %d\n", fd);
-	line = get_next_line(fd);
-	while (line != NULL)
-	{
-		printf("%s", line);
-		free(line);
-		line = get_next_line(fd);
-	}
-	printf("\n\nBUFFER_SIZE=%d\n\n", BUFFER_SIZE);
-	return (0);
-}
+// int	main(void)
+// {
+// 	int		fd;
+// 	char	*line;
+
+// 	fd = open(".test_file.txt", O_RDONLY);
+// 	if (fd > 0)
+// 		printf("FILE OPENED, fd = %d\n", fd);
+// 	line = get_next_line(fd);
+// 	while (line != NULL)
+// 	{
+// 		printf("%s", line);
+// 		free(line);
+// 		line = get_next_line(fd);
+// 	}
+// 	printf("\n\nBUFFER_SIZE=%d\n\n", BUFFER_SIZE);
+// 	return (0);
+// }
